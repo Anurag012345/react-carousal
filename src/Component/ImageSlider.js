@@ -103,10 +103,10 @@ export default function ImageSlider(props) {
   };
 
   const translatePartialSlides = (toTranslate) => {
-    let currentTranslation = -1 * (sliderPosition * widthSpan);
+    let currentTranslation = -sliderPosition * widthSpan;
     let totalTranslation = currentTranslation + toTranslate;
     for (var i = 0; i < children.length; i++) {
-      let ele = document.getElementById(`carouselitem` + i);
+      let ele = document.getElementById(`carousalitem` + i);
       ele.style.transform = `translateX(` + totalTranslation + `%)`;
     }
   };
