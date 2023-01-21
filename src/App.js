@@ -9,9 +9,9 @@ function App() {
   return (
     <div className="App">
       <div>
-        <ImageSlider>
-          <img src={pic2} alt="" />
+        <ImageSlider infinite>
           <img src={pic1} alt="" />
+          <img src={pic2} alt="" />
           <img src={pic3} alt="" />
           <img src={pic4} alt="" />
         </ImageSlider>
