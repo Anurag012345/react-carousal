@@ -5,6 +5,8 @@ const widthSpan = 100.1;
 export default function ImageSlider(props) {
   const [sliderPosition, setSliderPosition] = useState(0);
   const { children, infinite, timer, stopOnManual } = props;
+  let interval;
+  const [autoAdvance, setAutoAdvance] = useState(timer !== undefined);
   //Touch Touch Handlers
   const [touchStartPosition, setTouchStartPosition] = useState(0);
   const [touchEndPosition, setTouchEndPosition] = useState(0);
@@ -21,7 +23,7 @@ export default function ImageSlider(props) {
     if (newPosition > 0) {
       newPosition = newPosition - 1;
     } else if (infinite) {
-      newPosition = children.length - 1;
+      newPosition = children.length - 1 || 0;
     }
     translateFullSlides(newPosition);
     setSliderPosition(newPosition);
@@ -37,11 +39,19 @@ export default function ImageSlider(props) {
     setSliderPosition(newPosition);
   };
 
+  const manageTimer = () => {
+    clearInterval(interval);
+    if (stopOnManual) {
+      setAutoAdvance(false);
+    }
+  };
   const prevClickHandler = () => {
+    manageTimer();
     prevSliderHandler();
   };
 
   const nextClickHandler = () => {
+    manageTimer();
     nextSliderHandler();
   };
 
@@ -51,6 +61,7 @@ export default function ImageSlider(props) {
   };
 
   const keypressHandler = (event) => {
+    manageTimer();
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       event.stopPropagation();
@@ -78,20 +89,21 @@ export default function ImageSlider(props) {
   };
 
   const speedUpAnimation = () => {
-    for (let i = 0; i < children.length; i++) {
+    for (let i = 0; i < children.length || 1; i++) {
       let elem = document.getElementById(`carousalitem` + i);
       elem.classList.add(classes.FastAnimation);
     }
   };
 
   const slowDownAnimation = () => {
-    for (let i = 0; i < children.length; i++) {
+    for (let i = 0; i < children.length || 1; i++) {
       let elem = document.getElementById(`carousalitem` + i);
       elem.classList.remove(classes.FastAnimation);
     }
   };
 
   const touchStartHandler = (e) => {
+    manageTimer();
     speedUpAnimation();
     setTouchStartPosition(e.targetTouches[0].clientX);
     setTouchEndPosition(e.targetTouches[0].clientX);
@@ -125,6 +137,7 @@ export default function ImageSlider(props) {
   };
 
   const mouseStartHandler = (e) => {
+    manageTimer();
     e.preventDefault();
     speedUpAnimation();
     setMouseStartPosition(e.clientX);
@@ -162,7 +175,7 @@ export default function ImageSlider(props) {
   const translatePartialSlides = (toTranslate) => {
     let currentTranslation = -sliderPosition * widthSpan;
     let totalTranslation = currentTranslation + toTranslate;
-    for (var i = 0; i < children.length; i++) {
+    for (var i = 0; i < children.length || 1; i++) {
       let ele = document.getElementById(`carousalitem` + i);
       ele.style.transform = `translateX(` + totalTranslation + `%)`;
     }
@@ -177,8 +190,14 @@ export default function ImageSlider(props) {
 
   useEffect(() => {
     window.addEventListener("keydown", keypressHandler);
+    if (autoAdvance && !mouseClicked && !touched) {
+      interval = setInterval(() => {
+        nextSliderHandler();
+      }, timer);
+    }
     return () => {
       window.removeEventListener("keydown", keypressHandler);
+      clearInterval(interval);
     };
   });
 
