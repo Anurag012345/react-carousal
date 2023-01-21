@@ -4,11 +4,17 @@ import classes from "./ImageSlider.module.css";
 const widthSpan = 100.1;
 export default function ImageSlider(props) {
   const [sliderPosition, setSliderPosition] = useState(0);
-  const { children, infinite } = props;
+  const { children, infinite, timer, stopOnManual } = props;
+  //Touch Touch Handlers
   const [touchStartPosition, setTouchStartPosition] = useState(0);
   const [touchEndPosition, setTouchEndPosition] = useState(0);
   const [touched, setTouched] = useState(false);
   const [swiped, setSwiped] = useState(false);
+  //mouse event Handlers
+  const [mouseStartPosition, setMouseStartPosition] = useState(0);
+  const [mouseEndPosition, setMouseEndPosition] = useState(0);
+  const [mouseClicked, setMouseClicked] = useState(false);
+  const [mouseSwiped, setMouseSwiped] = useState(false);
 
   const prevSliderHandler = () => {
     let newPosition = sliderPosition;
@@ -71,7 +77,22 @@ export default function ImageSlider(props) {
     }
   };
 
+  const speedUpAnimation = () => {
+    for (let i = 0; i < children.length; i++) {
+      let elem = document.getElementById(`carousalitem` + i);
+      elem.classList.add(classes.FastAnimation);
+    }
+  };
+
+  const slowDownAnimation = () => {
+    for (let i = 0; i < children.length; i++) {
+      let elem = document.getElementById(`carousalitem` + i);
+      elem.classList.remove(classes.FastAnimation);
+    }
+  };
+
   const touchStartHandler = (e) => {
+    speedUpAnimation();
     setTouchStartPosition(e.targetTouches[0].clientX);
     setTouchEndPosition(e.targetTouches[0].clientX);
     setTouched(true);
@@ -90,6 +111,7 @@ export default function ImageSlider(props) {
 
   const touchEndHandler = (e) => {
     if (swiped) {
+      slowDownAnimation();
       if (touchStartPosition - touchEndPosition > 75) {
         nextSliderHandler();
       } else if (touchStartPosition - touchEndPosition < -75) {
@@ -100,6 +122,41 @@ export default function ImageSlider(props) {
     }
     setTouched(false);
     setSwiped(false);
+  };
+
+  const mouseStartHandler = (e) => {
+    e.preventDefault();
+    speedUpAnimation();
+    setMouseStartPosition(e.clientX);
+    setMouseEndPosition(e.clientX);
+    setMouseClicked(true);
+  };
+
+  const mouseMoveHandler = (e) => {
+    e.preventDefault();
+    var frameWidth = document.getElementById("DisplayFrame").offsetWidth;
+    if (mouseClicked === true) {
+      setMouseEndPosition(e.clientX);
+      let translateDist =
+        ((mouseEndPosition - mouseStartPosition) / frameWidth) * 100;
+      translatePartialSlides(translateDist);
+      setMouseSwiped(true);
+    }
+  };
+
+  const mouseEndHandler = (e) => {
+    slowDownAnimation();
+    if (mouseSwiped === true) {
+      if (mouseStartPosition - mouseEndPosition > 100) {
+        nextSliderHandler();
+      } else if (mouseStartPosition - mouseEndPosition < -100) {
+        prevSliderHandler();
+      } else {
+        jumpToSliderHandler(sliderPosition);
+      }
+    }
+    setMouseSwiped(false);
+    setMouseClicked(false);
   };
 
   const translatePartialSlides = (toTranslate) => {
@@ -154,6 +211,10 @@ export default function ImageSlider(props) {
           onTouchStart={(e) => touchStartHandler(e)}
           onTouchMove={(e) => touchMoveHandler(e)}
           onTouchEnd={(e) => touchEndHandler(e)}
+          onMouseDown={(e) => mouseStartHandler(e)}
+          onMouseMove={(e) => mouseMoveHandler(e)}
+          onMouseUp={(e) => mouseEndHandler(e)}
+          onMouseLeave={(e) => mouseEndHandler(e)}
         >
           {displayItem}
         </div>

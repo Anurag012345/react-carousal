@@ -64,7 +64,10 @@
   display: inline-block;
   vertical-align: top;
   margin-right: 0.1%;
-  transition: all 500ms linear;
+  transition: all 500ms ease-out;
+}
+.FastAnimation {
+  transition: all 50ms linear;
 }
 .CarousalItem img {
   height: 100%;

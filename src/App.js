@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <div>
-        <ImageSlider infinite>
+        <ImageSlider infinite timer={5000}>
           <img src={pic1} alt="" />
           <img src={pic2} alt="" />
           <img src={pic3} alt="" />
