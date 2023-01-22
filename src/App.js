@@ -8,6 +8,17 @@ import pic4 from "./Images/4.jpg";
 function App() {
   return (
     <div className="App">
+      <div className="title">
+        <h1
+          style={{
+            textAlign: "center",
+            fontSize: "18px",
+            marginBottom: "5px",
+          }}
+        >
+          Carousal
+        </h1>
+      </div>
       <div>
         <ImageSlider infinite timer={5000} stopOnManual>
           <img src={pic1} alt="" />

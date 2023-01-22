@@ -89,14 +89,14 @@ export default function ImageSlider(props) {
   };
 
   const speedUpAnimation = () => {
-    for (let i = 0; i < children.length || 1; i++) {
+    for (let i = 0; i < (children.length || 1); i++) {
       let elem = document.getElementById(`carousalitem` + i);
       elem.classList.add(classes.FastAnimation);
     }
   };
 
   const slowDownAnimation = () => {
-    for (let i = 0; i < children.length || 1; i++) {
+    for (let i = 0; i < (children.length || 1); i++) {
       let elem = document.getElementById(`carousalitem` + i);
       elem.classList.remove(classes.FastAnimation);
     }
@@ -173,11 +173,11 @@ export default function ImageSlider(props) {
   };
 
   const translatePartialSlides = (toTranslate) => {
-    let currentTranslation = -sliderPosition * widthSpan;
+    let currentTranslation = -1 * (sliderPosition * widthSpan);
     let totalTranslation = currentTranslation + toTranslate;
-    for (var i = 0; i < children.length || 1; i++) {
-      let ele = document.getElementById(`carousalitem` + i);
-      ele.style.transform = `translateX(` + totalTranslation + `%)`;
+    for (var i = 0; i < (children.length || 1); i++) {
+      let elem = document.getElementById(`carousalitem` + i);
+      elem.style.transform = `translateX(` + totalTranslation + `%)`;
     }
   };
   const translateFullSlides = (newPosition) => {
