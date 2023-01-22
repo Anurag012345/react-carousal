@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/react-carousal/static/css/main.9396bc3e.css",
+    "main.js": "/react-carousal/static/js/main.5a64faf6.js",
+    "static/media/4.jpg": "/react-carousal/static/media/4.5f35c3decca4aa06e65f.jpg",
+    "static/media/3.jpg": "/react-carousal/static/media/3.416e9d1253a0a0fc4fb1.jpg",
+    "static/media/1.jpg": "/react-carousal/static/media/1.045b5e337f261babd565.jpg",
+    "static/media/2.jpg": "/react-carousal/static/media/2.a4e507d3e0b0b9fbcd2f.jpg",
+    "index.html": "/react-carousal/index.html",
+    "main.9396bc3e.css.map": "/react-carousal/static/css/main.9396bc3e.css.map",
+    "main.5a64faf6.js.map": "/react-carousal/static/js/main.5a64faf6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9396bc3e.css",
+    "static/js/main.5a64faf6.js"
+  ]
+}
